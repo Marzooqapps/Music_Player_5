@@ -28,6 +28,8 @@
 #include "../inc/SysTickInts.h"
 
 
+//This task is executed by the handler periodically 
+void(*task)(void);
 
 // **************SysTick_Init*********************
 // Initialize SysTick periodic interrupts
@@ -36,18 +38,38 @@
 //        Maximum is 2^24-1
 //        Minimum is determined by length of ISR
 // Output: none
-void SysTick_Init(uint32_t period){long sr;
+void SysTick_Init(uint32_t period, void(*PeriodicTask)(void)){long sr;
   sr = StartCritical();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_RELOAD_R = period-1;// reload value
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
-  NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R&0x00FFFFFF)|0x40000000; // priority 2
+  NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R&0x00FFFFFF)|0xA0000000; // priority 5
                               // enable SysTick with core clock and interrupts
   NVIC_ST_CTRL_R = 0x07;
+	task = PeriodicTask;
   EndCritical(sr);
 }
 
+void SysTickHandler(void){
 
+	task();
+	
+}
+
+//Changes the SystickPeriod
+void changeSysTick_period(uint32_t period){
+		NVIC_ST_RELOAD_R = period-1; 
+}
+
+//Disable Timer
+void SysTick_Disarm(void){
+	NVIC_ST_CTRL_R = 0;
+}
+
+//Enable Timer
+void SysTick_Arm(void){
+	NVIC_ST_CTRL_R = 0x07;
+}
 
 
 

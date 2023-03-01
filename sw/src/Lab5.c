@@ -89,6 +89,9 @@
 /* NOTE: We suggest using the ./inc/ADCSWTrigger.h and the ./inc/TimerXA.h headers. */
 #include "./inc/DAC.h"
 #include "./inc/Dump.h"
+#include "./inc/Timer0A.h"
+#include "Sound.h"
+
 
 /** MMAP Pin definitions. */
 #define PF0   (*((volatile uint32_t *)0x40025004)) // Left Button
@@ -111,47 +114,54 @@ int main(void) {
     /* PLL Init. */
     PLL_Init(Bus80MHz);
 
-    /* Allow us to talk to the PC via PuTTy! Check device manager to see which
-       COM serial port we are on. The baud rate is 115200 chars/s. */
-    UART_Init();
+//	  /* Allow us to talk to the PC via PuTTy! Check device manager to see which
+//				 COM serial port we are on. The baud rate is 115200 chars/s. */
+//							UART_Init();
 
-    /* Start up display. */
-    ST7735_InitR(INITR_REDTAB);
+//							/* Start up display. */
+//							ST7735_InitR(INITR_REDTAB);
 
-    /* Initialize all ports. */
-    Unified_Port_Init();
+//							/* Initialize all ports. */
+//							Unified_Port_Init();
 
-    /* Start RGB flashing. WARNING! BRIGHT FLASHING COLORS. DO NOT RUN IF YOU HAVE EPILEPSY. */
-    RGBInit();
+//							/* Start RGB flashing. WARNING! BRIGHT FLASHING COLORS. DO NOT RUN IF YOU HAVE EPILEPSY. */
+//							RGBInit();
 
-    /* Allows any enabled timers to begin running. */
-    EnableInterrupts();
+//							/* Allows any enabled timers to begin running. */
+//							EnableInterrupts();
 
-    /* Print starting message to the PC and the ST7735. */
-    ST7735_FillScreen(ST7735_BLACK);
-    ST7735_SetCursor(0, 0);
-    ST7735_OutString(
-        "ECE445L Lab 5.\n"
-        "Press SW1 to start.\n");
-    UART_OutString(
-        "ECE445L Lab 5.\r\n"
-        "Press SW1 to start.\r\n");
-    Pause();
+//							/* Print starting message to the PC and the ST7735. */
+//							ST7735_FillScreen(ST7735_BLACK);
+//							ST7735_SetCursor(0, 0);
+//							ST7735_OutString(
+//									"ECE445L Lab 5.\n"
+//									"Press SW1 to start.\n");
+//							UART_OutString(
+//									"ECE445L Lab 5.\r\n"
+//									"Press SW1 to start.\r\n");
+//							Pause();
 
-    /* Stop RGB and turn off any on LEDs. */
-    RGBStop();
-    PF1 = 0;
-    PF2 = 0;
-    PF3 = 0;
+//							/* Stop RGB and turn off any on LEDs. */
+//							RGBStop();
+//							PF1 = 0;
+//							PF2 = 0;
+//							PF3 = 0;
 
-    /* Reset screen. */
-    ST7735_FillScreen(ST7735_BLACK);
-    ST7735_SetCursor(0, 0);
-    ST7735_OutString("Starting...\n");
-    UART_OutString("Starting...\r\n");
+//							/* Reset screen. */
+//							ST7735_FillScreen(ST7735_BLACK);
+//							ST7735_SetCursor(0, 0);
+//							ST7735_OutString("Starting...\n");
+//							UART_OutString("Starting...\r\n");
+	
+	
+		Sound_Init();					
+		
+		EnableInterrupts();		
+
 
     while (1) {
         /* TODO: Write your code here! */
+				
         WaitForInterrupt();
     }
     return 1;
