@@ -50,7 +50,7 @@ void SysTick_Init(uint32_t period, void(*PeriodicTask)(void)){long sr;
   EndCritical(sr);
 }
 
-void SysTickHandler(void){
+void SysTick_Handler(void){
 
 	task();
 	

@@ -15,6 +15,10 @@
 uint16_t BeatIndex;
 uint16_t NoteIndex;
 bool Play;
+
+
+#define MAX_NOTES 16
+#define MAX_BEATS 32
 //Instruments
 
 const unsigned short Flute[32] = {  	
@@ -35,8 +39,15 @@ const unsigned short Trumpet[32] = {
   1058,1113,1084,1075,1079,1105,1088,1049,1015,1045	
 }; 
 
+const unsigned short Wave[32] = {  
+  1024,1122,1215,1302,1378,1440,1486,1514,1524,1514,1486,
+  1440,1378,1302,1215,1122,1024,926,833,746,670,608,
+  562,534,524,534,562,608,670,746,833,926
+};  
+
+
 note Note;
-note song[10] = {{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute},{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute}};
+note song[MAX_NOTES] = {{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute},{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute}};
 
 
 
@@ -50,12 +61,25 @@ void Sound_Init(void){
 	NoteIndex = 0;
 	Play = true;
 	
-	EdgePortF_Init(Sound_PlayPause, Sound_PlayPause);
-	SysTick_Init(song[0].frequency, Sound_Out);
+	EdgePortF_Init(Sound_PlayPause, Sound_Rewind);
+	//SysTick_Init(song[0].frequency, Sound_Out);
+	SysTick_Init(D0, Sound_Out);
 	
 	dac_init();
 	
 }
+
+//Test to be removed later
+
+void Test_Sound_Out(void){
+
+	dac_output(Wave[BeatIndex]);
+	BeatIndex = (BeatIndex + 1) % MAX_BEATS;
+}
+
+
+
+
 
 //Outputs current value to DAC
 //Changes BeatIndex and NoteIndex
@@ -65,7 +89,7 @@ void Sound_Out(void){
 	
 	if(BeatIndex > 31){
 		BeatIndex = 0;
-		NoteIndex = (NoteIndex+1) % 10;
+		NoteIndex = (NoteIndex+1) % MAX_NOTES;
 		
 		//Change SysTick Frequency
 		changeSysTick_period(song[NoteIndex].frequency);	
