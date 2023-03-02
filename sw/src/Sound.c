@@ -49,6 +49,7 @@ const unsigned short Wave[32] = {
 note Note;
 note song[MAX_NOTES] = {{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute},{C_2, Trumpet},{F0, Trumpet},{D_1, Trumpet},{A0, Horn},{A1, Flute}};
 
+note song2[MAX_NOTES] = {{G, Flute},{G, Flute},{A, Flute},{G, Flute},{C, Flute},{B, Flute},{G, Flute},{G, Flute},{A, Flute},{G, Flute},{D, Flute},{C, Flute},{G, Flute},{G, Flute},{G, Flute},{E, Flute}, {C, Flute},{B, Flute},{A, Flute},{F, Flute},{F, Flute},{E},{C, Flute},{D, Flute},{C, Flute}};
 
 
 // **************Sound_Init*********************
