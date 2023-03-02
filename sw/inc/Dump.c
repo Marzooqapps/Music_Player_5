@@ -22,6 +22,10 @@
 uint32_t DumpTimeBuffer[DUMPBUFSIZE];
 uint32_t DumpDataBuf[DUMPBUFSIZE];
 uint32_t DumpNum;
+uint32_t MaxJitter;
+uint32_t MinJitter;
+uint8_t FirstCall;
+uint32_t previousJitter =0;
 
 void Timer1_Init(void) {
     volatile uint32_t delay;
@@ -49,11 +53,21 @@ void DumpCapture(uint32_t data){
     // Use TIMER1_TAR_R as current time.
     // 
     // Note: how do you deal with timer overflow?
+	
+	uint32_t currentTime = TIMER1_TAR_R;
+	
+	if(DumpNum < DUMPBUFSIZE && currentTime > DumpTimeBuffer[DumpNum-1]){
+		DumpTimeBuffer[DumpNum] = currentTime;
+		DumpDataBuf[DumpNum] = data;
+		DumpNum++;
+	}
+	
+	
 }
 
 uint32_t DumpCount(void){ 
     /* TODO (EE445L Lab 2): complete this. */
-    return 0;
+    return DumpNum;
 }
 
 uint32_t* DumpData(void){
@@ -70,6 +84,10 @@ void JitterInit(void){
     // Note that jitter is independent of dump and should not 
     // share the same data structures. Create and reset your own 
     // variables indicating the measured jitter.
+	
+		MaxJitter = 0;
+		MinJitter = 0xFFFFFFFF;
+		FirstCall = 1;
 }
 
 void JitterMeasure(void){
@@ -85,9 +103,30 @@ void JitterMeasure(void){
     // from previous calls.
     // 
     // Note: how do you deal with timer overflow?
+	
+		uint32_t currentJitter = TIMER1_TAR_R;
+	
+	//if(currentJitter > previousJitter){				// Checking for Overflow
+		if(FirstCall==1){
+			previousJitter = currentJitter;
+			FirstCall=0;
+		}
+		else{
+			uint32_t timeElapsed = currentJitter - previousJitter;
+			previousJitter = currentJitter;
+			
+			if(timeElapsed > MaxJitter){
+				MaxJitter = timeElapsed;
+			}
+			if(timeElapsed < MinJitter){
+				MinJitter = timeElapsed;
+			}			
+		}
+		
+	//}
 }
 
 uint32_t JitterGet(void){
     /* TODO (EE445L Lab 2): complete this. */
-    return 42;
+	return (MaxJitter - MinJitter);
 }
