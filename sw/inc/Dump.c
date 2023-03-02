@@ -45,6 +45,16 @@ void DumpInit(void){
     // What should dump init do?
     // - reset the dump memory so we don't see old data.
     // - reset or start any timing required for our DumpTimeBuffer.
+	
+		DumpNum =0;
+	
+	for(uint32_t i =0; i < DUMPBUFSIZE; i++){
+		
+		DumpTimeBuffer[i] =0;
+		DumpDataBuf[i] =0;
+	}
+	
+	Timer1_Init();
 }
 
 void DumpCapture(uint32_t data){
