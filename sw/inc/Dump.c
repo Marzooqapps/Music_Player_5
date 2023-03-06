@@ -15,8 +15,8 @@
 
 /** File includes. */
 #include <stdint.h>
-#include "../inc/Dump.h"
-#include "../inc/tm4c123gh6pm.h"
+#include "Dump.h"
+#include "tm4c123gh6pm.h"
 
 // Global variables
 uint32_t DumpTimeBuffer[DUMPBUFSIZE];

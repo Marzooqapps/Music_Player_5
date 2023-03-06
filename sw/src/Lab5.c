@@ -155,7 +155,7 @@ int main(void) {
 	
 	
 		Sound_Init();					
-		
+		//JitterInit();
 		EnableInterrupts();		
 
 
@@ -163,6 +163,8 @@ int main(void) {
         /* TODO: Write your code here! */
 				
         WaitForInterrupt();
+				//uint32_t jitter;
+				//jitter = JitterGet();
     }
     return 1;
 }

@@ -26,6 +26,7 @@
 #include "../inc/tm4c123gh6pm.h"
 #include "../inc/CortexM.h"
 #include "../inc/SysTickInts.h"
+#include "Dump.h"
 
 
 //This task is executed by the handler periodically 
@@ -53,7 +54,7 @@ void SysTick_Init(uint32_t period, void(*PeriodicTask)(void)){long sr;
 void SysTick_Handler(void){
 
 	task();
-	
+	//JitterMeasure();
 }
 
 //Changes the SystickPeriod
